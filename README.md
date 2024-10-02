@@ -1,34 +1,22 @@
 # VidDiff eval
-This page explains running eval for the Viddiff benchmark, hosted on Huggingface [here](). It was proposed in "Video Action Differencing". 
-
-The 
-
-The paper also proposed Viddiff method, which is in `viddiff_method`. To run it, look at [this README](viddiff_method/README.md). 
+This page explains running eval for the Viddiff benchmark, hosted on Huggingface [here](https://huggingface.co/datasets/viddiff/VidDiffBench). It was proposed in "Video Action Differencing" preprint. 
 
 ## Get the dataset
-TODO: 
-- Link to HF. 
-- Reproduce the key things here, but link out to how to download the videos. 
-- That has instructions on how to load these extra files: they are already in this repo.
-- About the video caching, and how it's on by default. 
-- Different dataset splits. 
-- do explain the form of the 'videos' tuple. 
+Follow the instructions on [VidDiffBench dataset](https://huggingface.co/datasets/viddiff/VidDiffBench).
 
 ## Running eval
-In `eval_diff.py`, after loading the dataset and running predictions, run:
+In `eval_diff.py`, after loading the dataset, run the prediction below:
 
-TODO: loading n_differences
 ```
 metrics = eval_viddiff.eval_viddiff(
-	dataset,
+		dataset,
 		predictions_unmatched=predictions,
-		eval_mode=0,
+		eval_mode=2, # 0  or 2
 		seed=0,
-		n_differences=10,
+		n_differences="data/n_differences.json",
 		results_dir="results")
 ```
-
-The structure for `predictions_unmatched`:
+The `dataset` is a huggingdace dataset from VidDiffBench, and the `predictions` are a list such that `predictions[i]` is for video pair `dataset[i]`. The closed setting is mode 2, and the open setting is mode 0. The structure for `predictions` must be:
 ```
 [
 	// list element i is a dict of difference predictions for sample i
@@ -52,39 +40,48 @@ The structure for `predictions_unmatched`:
 ]
 ```
 
-For example, here are predictions for a 3-element dataset. 
+For example, here are predictions for 1 sample:
 ```
-[
-	// an example
+[	{	
+    "6": {
+        "prediction": "b",
+        "description": "The jump is higher, allowing for a greater vertical lift during the shot."
+    },
+    "7": {
+        "prediction": "b",
+        "description": "The follow-through of the shot is more pronounced, with the shooting hand extended longer towards the basket."
+    },
+    "0": {
+        "prediction": "a",
+        "description": "The knees are bent more before the jump, providing better leverage for the shot."
+    },
+    "1": {
+        "prediction": "a",
+        "description": "The foot placement is wider, providing a more stable base for the jump shot."
+    },
+    "4": {
+        "prediction": "a",
+        "description": "The ball is held higher above the head before the jump, leading to a cleaner shot release."
+    },
+    ... 
 ]
 ```
 
-## LLM eval 
-The eval file makes some api cals to openaiAPI. Need to set the OpenAI Api key 
-
-
-## LLM evaluation for matching, and possible errors
-TODO: explain how these can be handled 
-
-Mention the openai 'overwrite_cache'
-
+In mode 2, the differences are given as input, so the prediction keys must match the ground truth keys. In mode 0, the differences are not given, so the 
 
 ## Video-LMM baselines 
-Some baselines are implemented in `lmms`. 
-- Which models. 
-- Different video representations.
-- Same prompt except for description of how the videos are represented. 
-- They all do automatic caching. 
+The eval file makes some api cals to openaiAPI. For running GPT, set OPENAI_API_KEY variable and for Gemini set `GOOGLE_API_KEY`. Then run LMM training with a config, for example:
+
+```
+python lmms/run_lmm.py -c lmms/configs/mode2-gpt-4o_ballsports_4fps.yaml
+```
 
 
 ## VidDiff method 
-The Viddiff method is in `viddiff_method`. To run it, look at [this README](viddiff_method/README.md). 
+The Viddiff method is in `viddiff_method`. To run it:
+```
+python viddiff_method/run_viddiff.py -c viddiff_method/configs/eval2_fitness.yaml
+```
 
-## Citation 
-TODO: copy what's in the HF repo. 
 
-
-## TODO somewhere 
-- Discuss the `fps`. This is not a property of the data, but is a property of the standard implementation. There are functions for subsampling in the `data/` util files, but different methods may want to subset the videos differently.
-- pip install and so on 
 
