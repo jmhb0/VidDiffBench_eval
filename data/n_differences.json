@@ -1,0 +1,42 @@
+{
+    "music": {
+        "music_0": 10,
+        "music_1": 10
+    },
+    "diving": {
+        "diving_0": 10
+    },
+    "easy": {
+        "easy_0": 5,
+        "easy_1": 5,
+        "easy_2": 5,
+        "easy_3": 5,
+        "easy_4": 5
+    },
+    "fitness": {
+        "fitness_0": 10,
+        "fitness_1": 16,
+        "fitness_2": 15,
+        "fitness_3": 9,
+        "fitness_4": 5,
+        "fitness_5": 6,
+        "fitness_6": 10,
+        "fitness_7": 16
+    },
+    "surgery": {
+        "surgery_0": 13,
+        "surgery_1": 16,
+        "surgery_2": 12
+    },
+    "demo": {
+        "demo_0": 5,
+        "demo_1": 5,
+        "demo_2": 5
+    },
+    "ballsports": {
+        "ballsports_0": 12,
+        "ballsports_1": 24,
+        "ballsports_2": 16,
+        "ballsports_3": 9
+    }
+}
